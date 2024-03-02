@@ -5,6 +5,7 @@ from middlewares.error_handler import ErrorHandler
 from middlewares.jwt_bearer import JWTBearer
 from routers.movie import movie_router
 from routers.user import user_router
+from routers.amor import amor_router
 
 app = FastAPI()
 #TITULO SWAGGER
@@ -12,10 +13,12 @@ app.title = 'Mi Aplicación con FastAPI'
 app.version = '0.0.1'
 
 
+
 app.add_middleware(ErrorHandler)
 # app.add_middleware(JWTBearer)
 app.include_router(movie_router)
 app.include_router(user_router)
+app.include_router(amor_router)
 
 
 Base.metadata.create_all(bind=engine)
