@@ -17,7 +17,7 @@ movie_router = APIRouter()
 def get_movies() -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movies()
-    return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(result), dependencies=[Depends(JWTBearer())])
+    return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(result))
 
 # pongo un parametro de busqueda | Path sirve para validad parámetros
 @movie_router.get('/movies/{id}',tags=['movies'], response_model=Movie)
