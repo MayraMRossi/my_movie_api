@@ -17,7 +17,7 @@ movie_router = APIRouter()
 def get_movies() -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movies()
-    return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(result))
+    return JSONResponse(status_code=status.HTTP_200_OK,content=jsonable_encoder(result), dependencies=[Depends(JWTBearer())])
 
 # pongo un parametro de busqueda | Path sirve para validad parámetros
 @movie_router.get('/movies/{id}',tags=['movies'], response_model=Movie)
@@ -29,7 +29,7 @@ def get_movie_by_id(id: int = Path(ge=1, le=2000)) -> Movie:
     return JSONResponse(status_code=status.HTTP_200_OK, content=jsonable_encoder(result))
 
 # parametros query
-@movie_router.get('/movies/',tags=['movies'] , response_model=List[Movie])
+@movie_router.get('/movies/',tags=['movies'] , response_model=List[Movie], dependencies=[Depends(JWTBearer())])
 def get_movies_by_category(category: str = Query(min_length=5, max_length=15)) -> List[Movie]:
     db = Session()
     result = MovieService(db).get_movie_by_category(category)
@@ -39,7 +39,7 @@ def get_movies_by_category(category: str = Query(min_length=5, max_length=15)) -
 
 # METODO POST
 # Poner = Body() sino quedan como parametros
-@movie_router.post('/movies',tags=['movies'], response_model=dict, status_code=201)
+@movie_router.post('/movies',tags=['movies'], response_model=dict, status_code=201, dependencies=[Depends(JWTBearer())])
 def create_movie(movie: Movie) -> dict:
     # Guardar en la DB
     db = Session()
@@ -49,7 +49,7 @@ def create_movie(movie: Movie) -> dict:
 
 
 # METODO PUT
-@movie_router.put('/movies/{id}',tags=['movies'], response_model=dict, status_code=200)
+@movie_router.put('/movies/{id}',tags=['movies'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
 def update_movie(id: int, movie: Movie) -> dict:
     db = Session()
     result = MovieService(db).get_movie_by_id(id)
@@ -60,7 +60,7 @@ def update_movie(id: int, movie: Movie) -> dict:
 
 
 # METODO DELETE
-@movie_router.delete('/movies/{id}',tags=['movies'], response_model=dict, status_code=200)
+@movie_router.delete('/movies/{id}',tags=['movies'], response_model=dict, status_code=200, dependencies=[Depends(JWTBearer())])
 def delete_movie(id:int) -> dict:
     db = Session()
     result = MovieService(db).get_movie_by_id(id)
